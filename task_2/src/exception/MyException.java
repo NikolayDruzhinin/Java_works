@@ -6,7 +6,8 @@ public class MyException extends Exception{
 		ZERO_DIVISION,
 		MATRIX_SIZE,
 		NO_FILE,
-		NO_PERM
+		NO_PERM,
+		READY
 		};
 	
 	private errorCodes error;
@@ -33,6 +34,9 @@ public class MyException extends Exception{
 			break;
 		case NO_PERM:
 			detail = "Can't read an input file";
+			break;
+		case READY:
+			detail = "Stream isn't ready to be read";
 			break;
 		default:
 			detail = "Error undefined";

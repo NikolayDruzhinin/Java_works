@@ -1,9 +1,10 @@
 package matrix_lib;
 import java.io.*;
+
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
+
 import exception.*;
 import exception.MyException.errorCodes;
 
@@ -12,27 +13,18 @@ public class Matrix {
 	int N;
 	double[][] matrix;
 	static final int MAX_SIZE = 1000000;
-	
+		
 	public void readMatrixSize(String fName) throws MyException{
-		Scanner in;
-		File inFile;
-		try {
-			inFile = new File(fName);
-			if (!(inFile.exists()))
-				throw new MyException(errorCodes.NO_FILE);
-			if (!(inFile.canRead()))
-				throw new MyException(errorCodes.NO_PERM);
-			in = new Scanner(inFile, StandardCharsets.UTF_8);
+		try (Scanner in = new Scanner(new File(fName), StandardCharsets.UTF_8);) {
 			
-			if (!(in.hasNextInt())) 
-				throw new MyException(errorCodes.INCORRECT_VALUE);
+		if (!(in.hasNextInt()))
+			throw new MyException(errorCodes.INCORRECT_VALUE);
 			
-			N = in.nextInt();
+		N =  in.nextInt();
 			
 			if (N > MAX_SIZE)
 				throw new MyException(errorCodes.MATRIX_SIZE);
 				
-			in.close();
 		} catch (NoSuchElementException e) {
 			System.out.println("Exception [No data to read in file " + fName + "]");
 		} catch (IOException e) {
@@ -60,17 +52,17 @@ public class Matrix {
 	
 	public void printMatrix(String fName, String description, boolean app) 
 			throws IOException {
-		FileWriter fw = new FileWriter(fName, StandardCharsets.UTF_8, app);
-		PrintWriter out = new PrintWriter(fw);
-		out.println(description);
-		for (int i = 0; i < N; ++i) {
-			for (int j = 0; j < N; ++j) {
-				out.format("%8.2f", matrix[i][j]);
+		try(FileWriter fw = new FileWriter(fName, StandardCharsets.UTF_8, app);
+		PrintWriter out = new PrintWriter(fw);) {
+			out.println(description);
+			for (int i = 0; i < N; ++i) {
+				for (int j = 0; j < N; ++j) {
+					out.format("%8.2f", matrix[i][j]);
+				}
+				out.println();
 			}
 			out.println();
 		}
-		out.println();
-		out.close();
 	}
 	
 	public void rotate90() {
