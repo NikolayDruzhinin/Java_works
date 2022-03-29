@@ -5,7 +5,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class LeitnerLib implements Serializable {
-
     static final int BOX_NUM = 10;
     CardBox[] boxes = new CardBox[BOX_NUM];
     int status = 0;
@@ -16,9 +15,7 @@ public class LeitnerLib implements Serializable {
     }
 
     public LeitnerLib(LeitnerLib l) {
-        for (CardBox box : boxes)
-            for (CardBox inBox : l.boxes)
-                box = inBox;
+        this.boxes = l.boxes;
         this.status = l.status;
     }
 
@@ -55,7 +52,6 @@ public class LeitnerLib implements Serializable {
                 System.out.print(entry.getKey() + " - ");
                 String answer = in.nextLine();
                 if (answer.isEmpty()) {
-                    in.close();
                     System.out.println("Goodbye!");
                     status = i;
                     System.out.println("Saved cardbox: " + status);
@@ -63,7 +59,7 @@ public class LeitnerLib implements Serializable {
                 }
                 else if (entry.getValue().equals(answer)) {
                     System.out.println("You're right!");
-                    if (i < 10) {
+                    if (i < BOX_NUM - 1) {
                         boxes[i].box.remove(entry.getKey());
                         boxes[i+1].box.put(entry.getKey(), entry.getValue());
                     }
