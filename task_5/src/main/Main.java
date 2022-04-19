@@ -1,6 +1,5 @@
 package main;
 
-import java.nio.channels.FileChannel;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -9,7 +8,7 @@ public class Main {
         //5.1 Return average value of list of integers
         System.out.println("{5.1 return average value of list of integers}");
         List<Integer> intList = new ArrayList<>();
-        initList(new Integer[]{1, 1, 1, 1, 2, 2, 3, 4, 5, 6, 6, 7, 7}, intList);
+        initList(new Integer[]{1, 2, 3, 4, 4, 5, 5, 6, 6, 7, 7}, intList);
         System.out.println(intList);
         System.out.println(getAverage(intList) + "\n");
 
@@ -34,7 +33,7 @@ public class Main {
         System.out.println("{5.5 Get last element from collection or throw an exception}");
         System.out.println(strList);
         try {
-            System.out.println(getLastElem(strList).get() + "\n");
+            System.out.println(getLastElem(strList) + "\n");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,6 +45,8 @@ public class Main {
 
         //5.7 convert all strings in the list into map where key - first symbol
         // of the string and value - the others
+        System.out.println("5.7 convert all strings in the list into map where key - first symbol " +
+                        "of the string and value - the others");
         System.out.println(strList);
         Map<String, String> strMap = convertList(strList);
         for (String key : strMap.keySet())
@@ -72,8 +73,9 @@ public class Main {
 
     private static List<Integer> setUniqueSquare(List<Integer> list) {
         return list.stream()
-                .distinct()
-                .map(s -> s * s)
+                .sorted()
+                .filter(x -> list.stream().filter(y -> y.equals(x)).count() == 1)
+                .map(x -> x * x)
                 .collect(Collectors.toList());
     }
 
@@ -84,12 +86,10 @@ public class Main {
                 .collect(Collectors.toList());
     }
 
-    private static Optional<?> getLastElem(Collection<?> c) throws Exception {
-        if(c.isEmpty())
-            throw new Exception();
+    private static Object getLastElem(Collection<?> c) throws Exception {
         return c.stream()
                 .skip(c.size()-1)
-                .findAny();
+                .findAny().orElseThrow(Exception::new);
     }
 
     private static Integer getEvenSum(List<Integer> l) {
